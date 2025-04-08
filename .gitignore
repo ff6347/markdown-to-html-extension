@@ -147,4 +147,4 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-test/index.html
+test_manual/index.html
