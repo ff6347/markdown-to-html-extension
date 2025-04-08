@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import MarkdownIt = require('markdown-it'); // Use require for CommonJS compatibility
+import markdownit from 'markdown-it';
 
 async function convertMarkdownToHtml(document: vscode.TextDocument) {
 	const config = vscode.workspace.getConfiguration('markdown-it');
@@ -15,7 +15,7 @@ async function convertMarkdownToHtml(document: vscode.TextDocument) {
 	}
 
 	const markdownText = document.getText();
-	const md = new MarkdownIt({
+	const md = new markdownit({
 		html: true, // Enable HTML tags in source
 		linkify: true, // Autoconvert URL-like text to links
 		typographer: true, // Enable smart quotes and other typographic replacements
@@ -73,7 +73,7 @@ async function convertMarkdownToHtml(document: vscode.TextDocument) {
 		vscode.window.setStatusBarMessage(
 			`Markdown converted to ${path.basename(outputFilePath)}`,
 			10000,
-		); // 5 seconds timeout
+		); // 10 seconds timeout
 
 		if (openInBrowser) {
 			const fileUri = vscode.Uri.file(outputFilePath);
