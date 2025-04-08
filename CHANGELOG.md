@@ -1,0 +1,9 @@
+# 1.0.0 (2025-04-08)
+
+
+### Bug Fixes
+
+* ci release missing token ([1bf6ae4](https://github.com/ff6347/markdown-to-html-extension/commit/1bf6ae4921a3565b19e75e394ad408001a5c22c1))
+* downgrade Node.js version to v22.14.0 ([f1d07a8](https://github.com/ff6347/markdown-to-html-extension/commit/f1d07a865c5dc6dcc326b4f7b98c7646dfad8f39))
+* Linter errors ([bd60df2](https://github.com/ff6347/markdown-to-html-extension/commit/bd60df21db966d9f4a33c28f0a59c37f0fea3958))
+* Make it work!  ([eec9254](https://github.com/ff6347/markdown-to-html-extension/commit/eec9254caed7a1a9075abeff0d7afec258fef191))
