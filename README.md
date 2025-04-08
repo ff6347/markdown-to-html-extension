@@ -5,7 +5,7 @@ A dead simple extension for VSCode that allows converting Markdown to HTML using
 ## Features
 
 - Convert the currently open Markdown file to HTML using the command palette (`Markdown: Convert to HTML`).
-- Save the generated HTML to a file (configurable path, defaults to `<filename>.html` next to the original Markdown file).
+- Save the generated HTML to a file (configurable path, defaults to `index.html` for untitled files, uses `<filename>` placeholder for saved files).
 - Optionally open the generated HTML file in the default web browser.
 - Optionally automatically convert and refresh the HTML output whenever the Markdown file is saved.
 
@@ -13,9 +13,9 @@ A dead simple extension for VSCode that allows converting Markdown to HTML using
 
 This extension contributes the following settings (found in VSCode Settings under Extensions > Markdown to HTML):
 
-- `markdown-it.outputFile`: (string) The file path pattern to save the generated HTML to. Use `<filename>` as a placeholder for the original Markdown filename without the extension. Default: `"<filename>.html"`
-- `markdown-it.openInBrowser`: (boolean) Whether to open the generated HTML in the default browser after conversion. Default: `true`
-- `markdown-it.refreshOnSave`: (boolean) Whether to automatically convert and refresh the HTML when the Markdown file is saved. Default: `true`
+- `markdown-to-html.outputFile`: (string) The file path pattern to save the generated HTML to. Use `<filename>` as a placeholder for the original Markdown filename without the extension. Defaults to `index.html`.
+- `markdown-to-html.openInBrowser`: (boolean) Whether to open the generated HTML in the default browser after conversion. Default: `true`
+- `markdown-to-html.refreshOnSave`: (boolean) Whether to automatically convert and refresh the HTML when the Markdown file is saved. Default: `true`
 
 ## Development
 
@@ -27,8 +27,9 @@ This extension contributes the following settings (found in VSCode Settings unde
 2.  **Install dependencies:**
     ```bash
     npm install
+    # or: npm ci
     ```
-3.  **Start the TypeScript compiler in watch mode:**
+3.  **Start the watchers (esbuild for bundling, tsc for type checking):**
     ```bash
     npm run watch
     ```
