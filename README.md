@@ -40,11 +40,11 @@ This extension contributes the following settings (found in VSCode Settings unde
 5.  **Run the extension:**
     - Press `F5` to open a new VSCode window with the extension loaded (Extension Development Host).
     - Open a Markdown file in the Extension Development Host window.
-    - Open the command palette (`Cmd+Shift+P` or `Ctrl+Shift+P`) and run `Markdown: Convert to HTML`.
+    - Open the command palette (`Cmd+Shift+P` or `Ctrl+Shift+P`) and run `Markdown: Convert to HTML` (associated with the `markdown-to-html.convertToHtml` command ID).
 
 ## Testing
 
-The extension comes with a test suite using the VS Code Extension Testing framework and Mocha. The tests cover:
+The extension comes with a test suite using the [`@vscode/test-cli`](https://github.com/microsoft/vscode-test-cli) framework and Mocha. The tests cover:
 
 - Extension activation
 - Markdown to HTML conversion
@@ -54,7 +54,7 @@ To run the tests:
 
 1. Make sure you have all dependencies installed:
    ```bash
-   npm install
+   npm ci
    ```
 
 2. Run the tests:
@@ -62,13 +62,27 @@ To run the tests:
    npm test
    ```
 
-3. To get test coverage:
-   ```bash
-   npm run coverage
-   ```
-
-The test suite runs in a special instance of VS Code and tests the extension in an environment similar to what users will experience.
+The test suite runs in a special instance of VS Code downloaded by the test runner and tests the extension in an environment similar to what users will experience.
 
 ## Publishing
 
-1.  **Install `vsce`
+1.  **Install `vsce` globally (if not already installed):**
+    ```bash
+    npm install -g @vscode/vsce
+    ```
+
+2.  **Package the extension:**
+    ```bash
+    vsce package
+    ```
+
+3.  **Publish the extension:**
+    - Open the Extensions view in VS Code.
+    - Click on the "More" button (three vertical dots) next to the extension.
+    - Select "Install from VSIX".
+    - Choose the VSIX file generated in the previous step.
+
+4.  **Publish the extension to the VS Code Marketplace:**
+    - Go to the [VS Code Marketplace](https://marketplace.visualstudio.com/manage/publishers/your-publisher-name)
+    - Click on "New Extension"
+    - Follow the instructions to upload the VSIX file.
