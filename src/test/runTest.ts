@@ -22,7 +22,7 @@ async function main() {
 		);
 
 		// Get CLI args for the platform
-		const [cliPath, ...args] =
+		const [_cliPath, ...args] =
 			resolveCliArgsFromVSCodeExecutablePath(vscodeExecutablePath);
 
 		// Run the integration test

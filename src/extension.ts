@@ -92,7 +92,7 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log('Markdown to HTML extension is now active!');
 
 	// Command registration
-	let convertCommandDisposable = vscode.commands.registerCommand(
+	const convertCommandDisposable = vscode.commands.registerCommand(
 		'markdown-it.convertToHtml',
 		() => {
 			const editor = vscode.window.activeTextEditor;
@@ -107,7 +107,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(convertCommandDisposable);
 
 	// Refresh on save listener
-	let saveListenerDisposable = vscode.workspace.onDidSaveTextDocument(
+	const saveListenerDisposable = vscode.workspace.onDidSaveTextDocument(
 		(document) => {
 			const config = vscode.workspace.getConfiguration('markdown-it');
 			if (
@@ -121,6 +121,3 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(saveListenerDisposable);
 }
-
-// This method is called when your extension is deactivated
-export function deactivate() {}
