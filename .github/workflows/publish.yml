@@ -25,6 +25,5 @@ jobs:
       - name: Publish to Visual Studio Marketplace
         run: npx @vscode/vsce publish -p ${{ secrets.VSCE_PAT }}
 
-      # - name: Publish to Open VSX Registry
-      #   run: npx ovsx publish -p ${{ secrets.OPEN_VSX_PAT }}
-      # Optional: remove if you don't want to publish to Open VSX
+      - name: Publish to Open VSX Registry
+        run: npx ovsx publish -p ${{ secrets.OPEN_VSX_PAT }}
