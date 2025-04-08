@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/ff6347/markdown-to-html-extension/compare/v1.0.0...v1.0.1) (2025-04-08)
+
+
+### Bug Fixes
+
+* ci release ([19e4cfd](https://github.com/ff6347/markdown-to-html-extension/commit/19e4cfd64ec3822c37b71439c8b8829ec55ac1bc))
+
 # 1.0.0 (2025-04-08)
 
 
