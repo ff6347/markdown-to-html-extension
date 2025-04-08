@@ -1,11 +1,12 @@
+// works
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import MarkdownIt = require('markdown-it'); // Use require for CommonJS compatibility
+import markdownit from 'markdown-it';
 
 async function convertMarkdownToHtml(document: vscode.TextDocument) {
-	const config = vscode.workspace.getConfiguration('markdown-it');
-	const outputFilePattern = config.get<string>('outputFile', '<filename>.html');
+	const config = vscode.workspace.getConfiguration('markdown-to-html');
+	const outputFilePattern = config.get<string>('outputFile', 'index.html');
 	const openInBrowser = config.get<boolean>('openInBrowser', true);
 
 	// Ensure it's a Markdown file
@@ -15,7 +16,7 @@ async function convertMarkdownToHtml(document: vscode.TextDocument) {
 	}
 
 	const markdownText = document.getText();
-	const md = new MarkdownIt({
+	const md = new markdownit({
 		html: true, // Enable HTML tags in source
 		linkify: true, // Autoconvert URL-like text to links
 		typographer: true, // Enable smart quotes and other typographic replacements
@@ -24,15 +25,15 @@ async function convertMarkdownToHtml(document: vscode.TextDocument) {
 	const htmlFragment = md.render(markdownText);
 
 	// Wrap in HTML5 boilerplate
+	const fileTitle = document.isUntitled
+		? 'Untitled Document'
+		: path.basename(document.uri.fsPath, path.extname(document.uri.fsPath));
 	const htmlContent = /**html */ `<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>${path.basename(
-		document.uri.fsPath,
-		path.extname(document.uri.fsPath),
-	)}</title>
+	<title>${fileTitle}</title>
 	<style>
 		/* Basic styles for readability */
 		body {
@@ -53,19 +54,46 @@ async function convertMarkdownToHtml(document: vscode.TextDocument) {
 </html>`;
 
 	// Determine output path
-	const currentFilePath = document.uri.fsPath;
-	const currentFileName = path.basename(
-		currentFilePath,
-		path.extname(currentFilePath),
-	);
-	const outputFileName = outputFilePattern.replace(
-		'<filename>',
-		currentFileName,
-	);
-	const outputFilePath = path.resolve(
-		path.dirname(currentFilePath),
-		outputFileName,
-	);
+	let outputFileName: string;
+	let outputDir: string;
+
+	if (document.isUntitled) {
+		// For untitled files, use the configured pattern directly.
+		// If it contains '<filename>', it won't be replaced, effectively using the pattern as is.
+		// Since the default is now 'index.html', this works as intended.
+		outputFileName = outputFilePattern; // Use the pattern (defaulting to index.html)
+
+		// Output directory logic for untitled files (unchanged)
+		if (
+			vscode.workspace.workspaceFolders &&
+			vscode.workspace.workspaceFolders.length > 0
+		) {
+			outputDir = vscode.workspace.workspaceFolders[0].uri.fsPath;
+		} else {
+			vscode.window.showWarningMessage(
+				'Cannot determine output directory for untitled file. Saving to workspace root or current directory.',
+			);
+			outputDir = '.';
+		}
+	} else {
+		// For saved files, replace '<filename>' in the pattern if present.
+		const currentFilePath = document.uri.fsPath;
+		const baseFileName = path.basename(
+			currentFilePath,
+			path.extname(currentFilePath),
+		);
+		// Replace <filename> if the pattern contains it
+		if (outputFilePattern.includes('<filename>')) {
+			outputFileName = outputFilePattern.replace('<filename>', baseFileName);
+		} else {
+			// If pattern doesn't contain <filename>, use it as is (e.g., a fixed name like "report.html")
+			outputFileName = outputFilePattern;
+		}
+		// Output to the same directory as the source file
+		outputDir = path.dirname(currentFilePath);
+	}
+
+	const outputFilePath = path.resolve(outputDir, outputFileName);
 
 	try {
 		await fs.promises.writeFile(outputFilePath, htmlContent, 'utf8');
@@ -73,14 +101,13 @@ async function convertMarkdownToHtml(document: vscode.TextDocument) {
 		vscode.window.setStatusBarMessage(
 			`Markdown converted to ${path.basename(outputFilePath)}`,
 			10000,
-		); // 5 seconds timeout
+		); // 10 seconds timeout
 
 		if (openInBrowser) {
 			const fileUri = vscode.Uri.file(outputFilePath);
 			vscode.env.openExternal(fileUri);
 		}
 	} catch (err) {
-		console.error('Error writing or opening HTML file:', err);
 		// Use unknown type assertion for error object
 		vscode.window.showErrorMessage(
 			`Failed to save or open HTML file: ${(err as Error).message}`,
@@ -89,11 +116,9 @@ async function convertMarkdownToHtml(document: vscode.TextDocument) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Markdown to HTML extension is now active!');
-
 	// Command registration
-	let convertCommandDisposable = vscode.commands.registerCommand(
-		'markdown-it.convertToHtml',
+	const convertCommandDisposable = vscode.commands.registerCommand(
+		'markdown-to-html.convertToHtml',
 		() => {
 			const editor = vscode.window.activeTextEditor;
 			if (editor) {
@@ -107,9 +132,9 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(convertCommandDisposable);
 
 	// Refresh on save listener
-	let saveListenerDisposable = vscode.workspace.onDidSaveTextDocument(
+	const saveListenerDisposable = vscode.workspace.onDidSaveTextDocument(
 		(document) => {
-			const config = vscode.workspace.getConfiguration('markdown-it');
+			const config = vscode.workspace.getConfiguration('markdown-to-html');
 			if (
 				config.get<boolean>('refreshOnSave', true) &&
 				document.languageId === 'markdown'
@@ -121,6 +146,3 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(saveListenerDisposable);
 }
-
-// This method is called when your extension is deactivated
-export function deactivate() {}

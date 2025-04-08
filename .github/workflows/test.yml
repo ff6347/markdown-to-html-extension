@@ -1,0 +1,57 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests
+name: Node.js CI
+permissions:
+  contents: write
+  packages: write
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    env:
+      CI: true
+      ESLINT_USE_FLAT_CONFIG: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js from .node-version
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build extension
+        run: npm run compile
+
+      # Install Xvfb and start it in the background
+      - name: Start Xvfb
+        run: |
+          sudo apt-get update && sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1024x768x16 &
+
+      # Run tests, explicitly setting the DISPLAY variable
+      - name: Run tests
+        env:
+          DISPLAY: :99.0 # Point to the Xvfb display
+        run: npm test
+  release:
+    name: semantic-release
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+      - run: |
+          npm ci
+          npx semantic-release --ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

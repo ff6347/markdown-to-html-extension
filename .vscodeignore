@@ -1,0 +1,36 @@
+# ignore files we dont want to publish
+.vscode
+.git
+.llm
+.vscode/**
+.vscode-test/**
+out/** # Ignore old test output dir if kept
+dist/** # Ignore new build output dir
+node_modules/**
+src/** # Source files are bundled
+.gitignore
+.yarnrc
+.github/**
+**/node_modules/**
+**/.yarn/**
+**/*.map
+**/*.ts
+**/tsconfig.json
+**/webpack.config.js
+.eslintrc.json
+.prettierrc
+.editorconfig
+.npmrc
+.yarnrc.yml
+.travis.yml
+.gitlab-ci.yml
+.DS_Store
+test/**
+examples/**
+docs/**
+coverage/**
+.nyc_output/**
+*.vsix
+.cursor
+esbuild.js # Ignore build script
+

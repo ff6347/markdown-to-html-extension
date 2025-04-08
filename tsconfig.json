@@ -1,15 +1,12 @@
 {
 	"compilerOptions": {
-		"module": "CommonJS",
-		"target": "ES2020",
+		"module": "Node16",
+		"target": "ES2022",
+		"lib": ["ES2022"],
 		"outDir": "out",
-		"lib": ["ES2020"],
 		"sourceMap": true,
 		"rootDir": "src",
-		"strict": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true
+		"strict": true
 	},
-	"exclude": ["node_modules", ".vscode-test"]
+	"include": ["src/**/*"]
 }
