@@ -1,0 +1,128 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# We use supabase cli for managing the db.
+
+This is the `supabase --help`
+
+```bash
+ supabase --help
+Supabase CLI 2.19.7
+
+Usage:
+  supabase [command]
+
+Quick Start:
+  bootstrap            Bootstrap a Supabase project from a starter template
+
+Local Development:
+  db                   Manage Postgres databases
+  gen                  Run code generation tools
+  init                 Initialize a local project
+  inspect              Tools to inspect your Supabase project
+  link                 Link to a Supabase project
+  login                Authenticate using an access token
+  logout               Log out and delete access tokens locally
+  migration            Manage database migration scripts
+  seed                 Seed a Supabase project from supabase/config.toml
+  start                Start containers for Supabase local development
+  status               Show status of local Supabase containers
+  stop                 Stop all local Supabase containers
+  test                 Run tests on local Supabase containers
+  unlink               Unlink a Supabase project
+
+Management APIs:
+  branches             Manage Supabase preview branches
+  config               Manage Supabase project configurations
+  domains              Manage custom domain names for Supabase projects
+  encryption           Manage encryption keys of Supabase projects
+  functions            Manage Supabase Edge functions
+  network-bans         Manage network bans
+  network-restrictions Manage network restrictions
+  orgs                 Manage Supabase organizations
+  postgres-config      Manage Postgres database config
+  projects             Manage Supabase projects
+  secrets              Manage Supabase secrets
+  services             Show versions of all Supabase services
+  snippets             Manage Supabase SQL snippets
+  ssl-enforcement      Manage SSL enforcement configuration
+  sso                  Manage Single Sign-On (SSO) authentication for projects
+  storage              Manage Supabase Storage objects
+  vanity-subdomains    Manage vanity subdomains for Supabase projects
+
+Additional Commands:
+  completion           Generate the autocompletion script for the specified shell
+  help                 Help about any command
+
+Flags:
+      --create-ticket                                  create a support ticket for any CLI error
+      --debug                                          output debug logs to stderr
+      --dns-resolver [ native | https ]                lookup domain names using the specified resolver (default native)
+      --experimental                                   enable experimental features
+  -h, --help                                           help for supabase
+      --network-id string                              use the specified docker network instead of a generated one
+  -o, --output [ env | pretty | json | toml | yaml ]   output format of status variables (default pretty)
+  -v, --version                                        version for supabase
+      --workdir string                                 path to a Supabase project directory
+
+Use "supabase [command] --help" for more information about a command.
+```
+
+This is for the supabase db command
+
+```bash
+ supabase db --help
+Manage Postgres databases
+
+Usage:
+  supabase db [command]
+
+Available Commands:
+  diff        Diffs the local database for schema changes
+  dump        Dumps data or schemas from the remote database
+  lint        Checks local database for typing error
+  pull        Pull schema from the remote database
+  push        Push new migrations to the remote database
+  reset       Resets the local database to current migrations
+  start       Starts local Postgres database
+
+Flags:
+  -h, --help   help for db
+
+Global Flags:
+      --create-ticket                                  create a support ticket for any CLI error
+      --debug                                          output debug logs to stderr
+      --dns-resolver [ native | https ]                lookup domain names using the specified resolver (default native)
+      --experimental                                   enable experimental features
+      --network-id string                              use the specified docker network instead of a generated one
+  -o, --output [ env | pretty | json | toml | yaml ]   output format of status variables (default pretty)
+      --workdir string                                 path to a Supabase project directory
+
+Use "supabase db [command] --help" for more information about a command.
+
+💡 sb => supabase
+```
+
+## Most used commands are:
+
+- supabase start
+- supabase stop
+- supabase db diff --file <NAME OF THE NEW MIGRATION WITHOUT TIMESTAMP>
+- supabase status
+- supabase gen types --local > src/database.ts
+
+## Creating migrations
+
+The process of migrations is like this.
+
+- `supabase start` (when not already running)
+- connect to db using TablePlus (or other project)
+- Do the changes on the db manually 
+- run `supabase db diff --file <NAME OF THE NEW MIGRATION WITHOUT TIMESTAMP>` 
+
+This will create a diff/migration using the migra tool and now we can inspect the changes
+
+Optionally run supabase db reset

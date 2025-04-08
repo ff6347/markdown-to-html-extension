@@ -1,0 +1,63 @@
+{
+	"name": "markdown-to-html",
+	"displayName": "Markdown to HTML",
+	"description": "A dead simple extension for VSCode that allows to convert Markdown to HTML using markdown-it.",
+	"version": "0.0.1",
+	"publisher": "fmoronzirfas",
+	"engines": {
+		"vscode": "^1.80.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onLanguage:markdown"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "markdown-it.convertToHtml",
+				"title": "Markdown: Convert to HTML"
+			}
+		],
+		"configuration": {
+			"title": "Markdown to HTML",
+			"properties": {
+				"markdown-it.outputFile": {
+					"type": "string",
+					"default": "<filename>.html",
+					"description": "The file path pattern to save the generated HTML to. Use <filename> as a placeholder for the original Markdown filename without extension."
+				},
+				"markdown-it.openInBrowser": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to open the generated HTML in the default browser."
+				},
+				"markdown-it.refreshOnSave": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to automatically convert and refresh the HTML when the Markdown file is saved."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"lint": "eslint src --ext ts"
+	},
+	"devDependencies": {
+		"@types/markdown-it": "14.1.2",
+		"@types/node": "18.x",
+		"@types/vscode": "^1.80.0",
+		"@typescript-eslint/eslint-plugin": "^5.59.8",
+		"@typescript-eslint/parser": "^5.59.8",
+		"eslint": "^8.41.0",
+		"typescript": "^5.1.3"
+	},
+	"dependencies": {
+		"markdown-it": "^14.0.0"
+	}
+}

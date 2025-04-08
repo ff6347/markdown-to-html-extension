@@ -1,0 +1,102 @@
+---
+description: 
+globs: 
+---
+# Fish Shell Usage Standards
+
+Standards for using fish as the default interactive shell.
+
+<rule>
+name: use_fish_shell
+description: Standards for fish shell configuration and usage
+filters:
+  # Match shell configuration files
+  - type: file_name
+    pattern: "(Dockerfile|docker-compose\\.ya?ml|\\.tool-versions|\\.envrc(\\..*)?|justfile|Makefile)$"
+  # Match shell script files
+  - type: file_extension
+    pattern: "\\.(sh|bash|zsh|fish)$"
+  # Match file creation and modification events
+  - type: event
+    pattern: "(file_create|file_modify)"
+
+actions:
+  - type: reject
+    conditions:
+      - pattern: "#!/bin/(ba)?sh"
+        message: "Use fish shell shebang (#!/usr/bin/env fish) for scripts"
+      - pattern: "SHELL=/bin/(ba)?sh"
+        message: "Set SHELL to fish in Makefiles and Docker configurations"
+
+  - type: suggest
+    message: |
+      When working with shell configurations:
+
+      1. Shell specifications:
+         ```dockerfile
+         # In Dockerfiles
+         SHELL ["/usr/bin/env", "fish", "-c"]
+
+         # In scripts
+         #!/usr/bin/env fish
+         ```
+
+      2. Required configurations:
+         ```
+         PROJECT_ROOT/
+         ├── .tool-versions     # Include fish version
+         ├── .envrc            # Set SHELL if needed
+         └── justfile          # Use fish for commands
+         ```
+
+      3. Shell script standards:
+         - Use fish syntax for all scripts
+         - Avoid POSIX-specific commands
+         - Use fish alternatives for common operations
+         - Document fish-specific features
+
+      4. Development environment:
+         - Set fish as default shell
+         - Use fisher for plugin management
+         - Configure direnv for fish
+         - Use fish_add_path for PATH management
+
+      5. CI/CD considerations:
+         - Specify fish in CI runners
+         - Include fish installation steps
+         - Use fish for test scripts
+         - Handle fish compatibility
+
+examples:
+  - input: |
+      # Bad: Using bash
+      #!/bin/bash
+      for i in $(seq 1 5); do
+        echo $i
+      done
+
+      # Good: Using fish
+      #!/usr/bin/env fish
+      for i in (seq 1 5)
+        echo $i
+      end
+    output: "Correctly formatted fish script"
+
+  - input: |
+      # Bad: Makefile with bash
+      SHELL := /bin/bash
+      .PHONY: test
+      test:
+          for f in *.txt; do echo $$f; done
+
+      # Good: Makefile with fish
+      SHELL := /usr/bin/env fish
+      .PHONY: test
+      test:
+          for f in *.txt; echo $$f; end
+    output: "Properly configured Makefile for fish"
+
+metadata:
+  priority: high
+  version: 1.0
+</rule>

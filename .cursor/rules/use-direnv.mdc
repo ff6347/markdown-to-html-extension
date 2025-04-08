@@ -1,0 +1,93 @@
+---
+description: Usage of direnv for managing env variables
+globs:
+  - "**/*.envrc"
+---
+ # Direnv Usage Standards
+
+Standards for environment variable management using direnv and .envrc files.
+
+<rule>
+name: use_direnv
+description: Standards for managing environment variables using direnv
+filters:
+  # Match environment files
+  - type: file_name
+    pattern: "\\.(env|envrc)(\\..*)?$"
+  # Match file creation and modification events
+  - type: event
+    pattern: "(file_create|file_modify)"
+
+actions:
+  - type: reject
+    conditions:
+      - pattern: "^\\.env$"
+        message: "Use .envrc with direnv instead of .env files for environment variables"
+      - pattern: "^(?!\\.envrc(\\.example)?$).*\\.envrc.*$"
+        message: "Only .envrc and .envrc.example are allowed for direnv configuration"
+
+  - type: suggest
+    message: |
+      When managing environment variables:
+
+      1. Always use direnv with .envrc files:
+         ```
+         # .envrc
+         export VARIABLE_NAME=value
+         ```
+
+      2. Required structure:
+         ```
+         PROJECT_ROOT/
+         ├── .envrc              # Active configuration (gitignored)
+         ├── .envrc.example      # Template (committed)
+         └── .gitignore          # Must ignore .envrc
+         ```
+
+      3. Environment variables must:
+         - Use SCREAMING_SNAKE_CASE
+         - Always use 'export' keyword
+         - Include descriptive comments
+         - Group related variables
+
+      4. Docker Compose compatibility:
+         - Use dotenv_if_exists in .envrc
+         - Keep minimal .env.example for docker-compose
+         - Only include docker-specific variables in .env
+
+      5. Security practices:
+         - Never commit .envrc files
+         - Use .envrc.example as templates
+         - Set restrictive permissions (600)
+         - Use direnv allow explicitly
+
+examples:
+  - input: |
+      # Bad: Using .env file
+      DATABASE_URL=postgres://...
+
+      # Good: Using .envrc with exports
+      export DATABASE_URL=postgres://...
+      export API_KEY=secret
+      export DEBUG=true
+    output: "Correctly configured direnv environment"
+
+  - input: |
+      # Bad: Missing exports
+      API_KEY=123
+      DEBUG=true
+
+      # Good: With exports and grouping
+      # API Configuration
+      export API_KEY=123
+      export API_VERSION=v1
+
+      # Debug Settings
+      export DEBUG=true
+      export LOG_LEVEL=info
+    output: "Properly formatted environment variables"
+
+metadata:
+  priority: high
+  version: 1.0
+</rule>
