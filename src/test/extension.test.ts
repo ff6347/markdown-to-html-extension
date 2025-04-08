@@ -7,11 +7,11 @@ suite('Extension Test Suite', () => {
 	// Ensure extension is activated
 	suiteSetup(async () => {
 		await vscode.commands.executeCommand('workbench.action.closeAllEditors');
-		await vscode.commands.executeCommand('markdown-it.convertToHtml');
+		await vscode.commands.executeCommand('markdown-to-html.convertToHtml');
 	});
 
 	test('Extension should be present and activated', async () => {
-		const ext = vscode.extensions.getExtension('markdown-to-html');
+		const ext = vscode.extensions.getExtension('fmoronzirfas.markdown-to-html');
 		assert.ok(ext, 'Extension should be available');
 		if (!ext.isActive) {
 			await ext.activate();
@@ -29,7 +29,7 @@ suite('Extension Test Suite', () => {
 
 		const mdContent = '# Test Heading\n\nThis is a test paragraph.';
 		const mdPath = path.join(workspaceFolder.uri.fsPath, 'test.md');
-		const htmlPath = path.join(workspaceFolder.uri.fsPath, 'test.html');
+		const htmlPath = path.join(workspaceFolder.uri.fsPath, 'index.html');
 
 		// Clean up any existing files
 		if (fs.existsSync(htmlPath)) {
@@ -44,8 +44,8 @@ suite('Extension Test Suite', () => {
 			const doc = await vscode.workspace.openTextDocument(mdPath);
 			await vscode.window.showTextDocument(doc);
 
-			// Execute the command
-			await vscode.commands.executeCommand('markdown-it.convertToHtml');
+			// Execute the command with the correct ID
+			await vscode.commands.executeCommand('markdown-to-html.convertToHtml');
 
 			// Wait a bit for the file to be created
 			await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -81,8 +81,8 @@ suite('Extension Test Suite', () => {
 	});
 
 	test('Should respect configuration', async () => {
-		const config = vscode.workspace.getConfiguration('markdown-it');
-		assert.strictEqual(config.get('outputFile'), '<filename>.html');
+		const config = vscode.workspace.getConfiguration('markdown-to-html');
+		assert.strictEqual(config.get('outputFile'), 'index.html');
 		assert.strictEqual(config.get('openInBrowser'), true);
 		assert.strictEqual(config.get('refreshOnSave'), true);
 	});

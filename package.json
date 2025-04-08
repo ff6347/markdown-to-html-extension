@@ -17,28 +17,28 @@
 	"activationEvents": [
 		"onLanguage:markdown"
 	],
-	"main": "./out/extension.js",
+	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "markdown-it.convertToHtml",
+				"command": "markdown-to-html.convertToHtml",
 				"title": "Markdown: Convert to HTML"
 			}
 		],
 		"configuration": {
 			"title": "Markdown to HTML",
 			"properties": {
-				"markdown-it.outputFile": {
+				"markdown-to-html.outputFile": {
 					"type": "string",
-					"default": "<filename>.html",
-					"description": "The file path pattern to save the generated HTML to. Use <filename> as a placeholder for the original Markdown filename without extension."
+					"default": "index.html",
+					"description": "The file path pattern to save the generated HTML to. Use <filename> as a placeholder for the original Markdown filename without extension. Defaults to index.html for untitled files or if <filename> is not used."
 				},
-				"markdown-it.openInBrowser": {
+				"markdown-to-html.openInBrowser": {
 					"type": "boolean",
 					"default": true,
 					"description": "Whether to open the generated HTML in the default browser."
 				},
-				"markdown-it.refreshOnSave": {
+				"markdown-to-html.refreshOnSave": {
 					"type": "boolean",
 					"default": true,
 					"description": "Whether to automatically convert and refresh the HTML when the Markdown file is saved."
@@ -47,32 +47,41 @@
 		}
 	},
 	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
+		"vscode:prepublish": "npm run package",
+		"compile": "npm run check-types && npm run lint && node esbuild.js",
+		"watch": "npm-run-all -p watch:*",
+		"watch:esbuild": "node esbuild.js --watch",
+		"watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+		"package": "npm run check-types && npm run lint && node esbuild.js --production",
+		"compile-tests": "tsc -p tsconfig.json",
+		"watch-tests": "tsc -p tsconfig.json -w",
+		"pretest": "npm run compile-tests && npm run compile && npm run lint",
+		"check-types": "tsc --noEmit",
 		"lint": "eslint src",
-		"pretest": "npm run compile && npm run lint",
-		"test": "node ./out/test/runTest.js",
-		"coverage": "nyc npm run test"
+		"test": "vscode-test"
 	},
 	"devDependencies": {
+		"@eslint/js": "9.24.0",
 		"@technologiestiftung/semantic-release-config": "1.2.4",
-		"@types/glob": "^8.1.0",
-		"@types/markdown-it": "^13.0.7",
-		"@types/mocha": "^10.0.6",
+		"@types/glob": "8.1.0",
+		"@types/markdown-it": "13.0.7",
+		"@types/mocha": "10.0.6",
 		"@types/node": "18.x",
-		"@types/vscode": "^1.80.0",
-		"@typescript-eslint/eslint-plugin": "^5.59.8",
-		"@typescript-eslint/parser": "^5.59.8",
-		"@vscode/test-electron": "^2.3.9",
-		"eslint": "^8.41.0",
-		"glob": "^8.1.0",
-		"mocha": "^10.2.0",
-		"nyc": "^15.1.0",
+		"@types/vscode": "1.80.0",
+		"@typescript-eslint/eslint-plugin": "8.29.1",
+		"@typescript-eslint/parser": "8.29.1",
+		"@vscode/test-electron": "2.3.9",
+		"@vscode/test-cli": "0.0.10",
+		"eslint": "9.24.0",
+		"esbuild": "0.25.1",
+		"glob": "8.1.0",
+		"mocha": "10.2.0",
+		"npm-run-all": "4.1.5",
 		"semantic-release": "24.2.3",
-		"typescript": "^5.1.3"
+		"typescript": "5.1.3",
+		"typescript-eslint": "8.29.1"
 	},
 	"dependencies": {
-		"markdown-it": "^14.0.0"
+		"markdown-it": "14.0.0"
 	}
 }

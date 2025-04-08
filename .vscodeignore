@@ -4,6 +4,10 @@
 .llm
 .vscode/**
 .vscode-test/**
+out/** # Ignore old test output dir if kept
+dist/** # Ignore new build output dir
+node_modules/**
+src/** # Source files are bundled
 .gitignore
 .yarnrc
 .github/**
@@ -20,10 +24,7 @@
 .yarnrc.yml
 .travis.yml
 .gitlab-ci.yml
-.github
-.git
 .DS_Store
-src/**
 test/**
 examples/**
 docs/**
@@ -31,4 +32,5 @@ coverage/**
 .nyc_output/**
 *.vsix
 .cursor
+esbuild.js # Ignore build script
 

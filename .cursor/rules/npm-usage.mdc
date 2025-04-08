@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# npm usage
+
+we always use exact version. no semver ranges. of course for engines this does not apply only dependencies and devDependencies and optionalDependencies 
+if present use the package-lock.json with npm ci

@@ -98,11 +98,11 @@ web_modules/
 
 # Next.js build output
 .next
-out
+# out # No longer needed if not using Next.js or old tsc output
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+dist # Add dist
 
 # Gatsby files
 .cache/
@@ -141,6 +141,8 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+out # Add out (for old test compile if kept)
+
 # yarn v2
 .yarn/cache
 .yarn/unplugged
@@ -148,3 +150,16 @@ dist
 .yarn/install-state.gz
 .pnp.*
 test_manual/index.html
+out/extension.js
+out/extension.js.map
+out/extension.test.js
+out/test/extension.test.js
+out/test/extension.test.js.map
+out/test/runTest.js
+out/test/runTest.js.map
+out/test/suite/extension.test.js
+out/test/suite/extension.test.js.map
+out/test/suite/index.js
+out/test/suite/index.js.map
+dist/extension.js
+dist/extension.js.map
