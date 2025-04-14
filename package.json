@@ -23,7 +23,19 @@
 		"commands": [
 			{
 				"command": "markdown-to-html.convertToHtml",
-				"title": "Markdown: Convert to HTML"
+				"title": "Markdown to HTML: Convert to HTML"
+			},
+			{
+				"command": "markdown-to-html.openInBrowser",
+				"title": "Markdown to HTML: Open in Browser"
+			},
+			{
+				"command": "markdown-to-html.enableAutoRefresh",
+				"title": "Markdown to HTML: Enable Auto-Refresh on Save"
+			},
+			{
+				"command": "markdown-to-html.disableAutoRefresh",
+				"title": "Markdown to HTML: Disable Auto-Refresh on Save"
 			}
 		],
 		"configuration": {
@@ -33,16 +45,6 @@
 					"type": "string",
 					"default": "index.html",
 					"description": "The file path pattern to save the generated HTML to. Use <filename> as a placeholder for the original Markdown filename without extension. Defaults to index.html for untitled files or if <filename> is not used."
-				},
-				"markdown-to-html.openInBrowser": {
-					"type": "boolean",
-					"default": true,
-					"description": "Whether to open the generated HTML in the default browser."
-				},
-				"markdown-to-html.refreshOnSave": {
-					"type": "boolean",
-					"default": true,
-					"description": "Whether to automatically convert and refresh the HTML when the Markdown file is saved."
 				}
 			}
 		}
