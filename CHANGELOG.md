@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/ff6347/markdown-to-html-extension/compare/v1.0.1...v1.1.0) (2025-04-14)
+
+
+### Features
+
+* Add icon for extension ([0d3d38d](https://github.com/ff6347/markdown-to-html-extension/commit/0d3d38d4a8ba2732380f19f738ee99d6b06ecf01))
+
 ## [1.0.1](https://github.com/ff6347/markdown-to-html-extension/compare/v1.0.0...v1.0.1) (2025-04-08)
 
 
