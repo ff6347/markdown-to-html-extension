@@ -33,4 +33,15 @@ coverage/**
 *.vsix
 .cursor
 esbuild.js # Ignore build script
-
+*.test.ts
+changelog.md
+.vscode-test.mjs
+.node-version
+esbuild.js
+eslint.config.mjs
+readme.md
+renovate.json
+test
+test_manual
+src/test/*.test.js
+icon.png
