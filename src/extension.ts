@@ -122,12 +122,29 @@ export function activate(context: vscode.ExtensionContext) {
 	// Command registration
 	const convertCommandDisposable = vscode.commands.registerCommand(
 		'markdown-to-html.convertToHtml',
-		() => {
+		async () => {
+			// Make the callback async
 			const editor = vscode.window.activeTextEditor;
-			if (editor) {
-				convertMarkdownToHtml(editor.document);
+			if (editor && editor.document.languageId === 'markdown') {
+				try {
+					// Await conversion to ensure it succeeds before adding to the set
+					await convertMarkdownToHtml(editor.document);
+					// Add the file path to the set on successful conversion
+					explicitlyConvertedFiles.add(editor.document.uri.fsPath);
+					// Optional: Provide feedback that auto-refresh is now active for this file
+					// vscode.window.showInformationMessage(`Enabled auto-refresh on save for ${path.basename(editor.document.uri.fsPath)}`);
+				} catch (err) {
+					// Error is already handled and shown by convertMarkdownToHtml
+					// We catch it here primarily to prevent adding the file to the set on failure.
+					console.error(
+						`Conversion command failed for ${editor.document.uri.fsPath}:`,
+						err,
+					);
+				}
+			} else if (editor) {
+				vscode.window.showWarningMessage('Please open a Markdown file first.');
 			} else {
-				vscode.window.showWarningMessage('No active Markdown editor found.');
+				vscode.window.showWarningMessage('No active editor found.');
 			}
 		},
 	);
