@@ -23,7 +23,13 @@
 		"commands": [
 			{
 				"command": "markdown-to-html.convertToHtml",
-				"title": "Markdown: Convert to HTML"
+			{
+				"command": "markdown-to-html.enableAutoRefresh",
+				"title": "Markdown to HTML: Enable Auto-Refresh on Save"
+			},
+			{
+				"command": "markdown-to-html.disableAutoRefresh",
+				"title": "Markdown to HTML: Disable Auto-Refresh on Save"
 			}
 		],
 		"configuration": {

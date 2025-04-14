@@ -116,6 +116,9 @@ async function convertMarkdownToHtml(document: vscode.TextDocument) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+	// Keep track of files explicitly converted by the user command
+	const explicitlyConvertedFiles = new Set<string>();
+
 	// Command registration
 	const convertCommandDisposable = vscode.commands.registerCommand(
 		'markdown-to-html.convertToHtml',
@@ -130,6 +133,52 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(convertCommandDisposable);
+	// enable auto-refresh for the active file
+	const enableAutoRefreshCommandDisposable = vscode.commands.registerCommand(
+		'markdown-to-html.enableAutoRefresh',
+		() => {
+			const editor = vscode.window.activeTextEditor;
+			if (editor && editor.document.languageId === 'markdown') {
+				explicitlyConvertedFiles.add(editor.document.uri.fsPath);
+				vscode.window.setStatusBarMessage(
+					`Auto-refresh enabled for ${path.basename(
+						editor.document.uri.fsPath,
+					)}`,
+					5000, // 5 seconds
+				);
+			} else {
+				vscode.window.showWarningMessage('Please open a Markdown file first.');
+			}
+		},
+	);
+
+	context.subscriptions.push(enableAutoRefreshCommandDisposable);
+	// Command to stop auto-refresh for the active file
+	const disableAutoRefreshCommandDisposable = vscode.commands.registerCommand(
+		'markdown-to-html.disableAutoRefresh',
+		() => {
+			const editor = vscode.window.activeTextEditor;
+			if (editor && editor.document.languageId === 'markdown') {
+				const filePath = editor.document.uri.fsPath;
+				if (explicitlyConvertedFiles.has(filePath)) {
+					explicitlyConvertedFiles.delete(filePath);
+					vscode.window.setStatusBarMessage(
+						`Stopped auto-refresh on save for ${path.basename(filePath)}`,
+						5000, // 5 seconds
+					);
+				} else {
+					vscode.window.showWarningMessage(
+						'Auto-refresh was not active for this file.',
+					);
+				}
+			} else {
+				vscode.window.showWarningMessage(
+					'Please have an active Markdown editor open.',
+				);
+			}
+		},
+	);
+	context.subscriptions.push(disableAutoRefreshCommandDisposable);
 
 	// Refresh on save listener
 	const saveListenerDisposable = vscode.workspace.onDidSaveTextDocument(
