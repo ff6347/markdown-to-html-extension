@@ -17,6 +17,7 @@
 	"activationEvents": [
 		"onLanguage:markdown"
 	],
+	"icon": "icon.png",
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
