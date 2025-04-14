@@ -150,6 +150,72 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(convertCommandDisposable);
+
+	const openInBrowserCommandDisposable = vscode.commands.registerCommand(
+		'markdown-to-html.openInBrowser',
+		async () => {
+			const editor = vscode.window.activeTextEditor;
+			if (editor && editor.document.languageId === 'markdown') {
+				try {
+					// 1. Perform the conversion (wait for it)
+					await convertMarkdownToHtml(editor.document);
+
+					// 2. Determine the output path AGAIN (needed to open it)
+					const config = vscode.workspace.getConfiguration('markdown-to-html');
+					const outputFilePattern = config.get<string>(
+						'outputFile',
+						'index.html',
+					);
+					let outputFileName: string;
+					let outputDir: string;
+
+					if (editor.document.isUntitled) {
+						outputFileName = outputFilePattern;
+						if (
+							vscode.workspace.workspaceFolders &&
+							vscode.workspace.workspaceFolders.length > 0
+						) {
+							outputDir = vscode.workspace.workspaceFolders[0].uri.fsPath;
+						} else {
+							outputDir = '.'; // Fallback
+						}
+					} else {
+						const currentFilePath = editor.document.uri.fsPath;
+						const baseFileName = path.basename(
+							currentFilePath,
+							path.extname(currentFilePath),
+						);
+						if (outputFilePattern.includes('<filename>')) {
+							outputFileName = outputFilePattern.replace(
+								'<filename>',
+								baseFileName,
+							);
+						} else {
+							outputFileName = outputFilePattern;
+						}
+						outputDir = path.dirname(currentFilePath);
+					}
+					const outputFilePath = path.resolve(outputDir, outputFileName);
+
+					// 3. Open the determined output file path
+					const fileUri = vscode.Uri.file(outputFilePath);
+					vscode.env.openExternal(fileUri);
+				} catch (err) {
+					// Error during conversion is already shown by convertMarkdownToHtml
+					// We might want a specific error if opening fails, but openExternal usually doesn't throw easily
+					console.error(`Open in browser command failed:`, err);
+					// Optionally show a message if opening itself fails, though less common
+					// vscode.window.showErrorMessage(`Failed to open HTML file in browser: ${(err as Error).message}`);
+				}
+			} else if (editor) {
+				vscode.window.showWarningMessage('Please open a Markdown file first.');
+			} else {
+				vscode.window.showWarningMessage('No active editor found.');
+			}
+		},
+	);
+	context.subscriptions.push(openInBrowserCommandDisposable);
+
 	// enable auto-refresh for the active file
 	const enableAutoRefreshCommandDisposable = vscode.commands.registerCommand(
 		'markdown-to-html.enableAutoRefresh',

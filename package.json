@@ -23,6 +23,12 @@
 		"commands": [
 			{
 				"command": "markdown-to-html.convertToHtml",
+				"title": "Markdown to HTML: Convert to HTML"
+			},
+			{
+				"command": "markdown-to-html.openInBrowser",
+				"title": "Markdown to HTML: Open in Browser"
+			},
 			{
 				"command": "markdown-to-html.enableAutoRefresh",
 				"title": "Markdown to HTML: Enable Auto-Refresh on Save"
