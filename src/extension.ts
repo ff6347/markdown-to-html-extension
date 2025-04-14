@@ -7,7 +7,6 @@ import markdownit from 'markdown-it';
 async function convertMarkdownToHtml(document: vscode.TextDocument) {
 	const config = vscode.workspace.getConfiguration('markdown-to-html');
 	const outputFilePattern = config.get<string>('outputFile', 'index.html');
-	const openInBrowser = config.get<boolean>('openInBrowser', true);
 
 	// Ensure it's a Markdown file
 	if (document.languageId !== 'markdown') {
@@ -102,11 +101,6 @@ async function convertMarkdownToHtml(document: vscode.TextDocument) {
 			`Markdown converted to ${path.basename(outputFilePath)}`,
 			10000,
 		); // 10 seconds timeout
-
-		if (openInBrowser) {
-			const fileUri = vscode.Uri.file(outputFilePath);
-			vscode.env.openExternal(fileUri);
-		}
 	} catch (err) {
 		// Use unknown type assertion for error object
 		vscode.window.showErrorMessage(
@@ -266,12 +260,22 @@ export function activate(context: vscode.ExtensionContext) {
 	// Refresh on save listener
 	const saveListenerDisposable = vscode.workspace.onDidSaveTextDocument(
 		(document) => {
-			const config = vscode.workspace.getConfiguration('markdown-to-html');
 			if (
-				config.get<boolean>('refreshOnSave', true) &&
-				document.languageId === 'markdown'
+				document.languageId === 'markdown' &&
+				// IMPORTANT: Only convert on save if the file was previously converted via the command
+				// or explicitly enabled via the command
+				explicitlyConvertedFiles.has(document.uri.fsPath)
 			) {
-				convertMarkdownToHtml(document);
+				// Call conversion, but errors here are less critical to report loudly
+				// as the user didn't explicitly trigger it this time.
+				convertMarkdownToHtml(document).catch((err) => {
+					console.error(
+						`Auto-refresh on save failed for ${document.uri.fsPath}:`,
+						(err as Error).message,
+					);
+					// Optionally, consider removing the file from the set if auto-refresh fails?
+					// explicitlyConvertedFiles.delete(document.uri.fsPath);
+				});
 			}
 		},
 	);

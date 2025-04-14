@@ -45,16 +45,6 @@
 					"type": "string",
 					"default": "index.html",
 					"description": "The file path pattern to save the generated HTML to. Use <filename> as a placeholder for the original Markdown filename without extension. Defaults to index.html for untitled files or if <filename> is not used."
-				},
-				"markdown-to-html.openInBrowser": {
-					"type": "boolean",
-					"default": true,
-					"description": "Whether to open the generated HTML in the default browser."
-				},
-				"markdown-to-html.refreshOnSave": {
-					"type": "boolean",
-					"default": true,
-					"description": "Whether to automatically convert and refresh the HTML when the Markdown file is saved."
 				}
 			}
 		}
