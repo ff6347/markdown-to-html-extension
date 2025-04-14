@@ -2,7 +2,7 @@
 	"name": "markdown-to-html",
 	"displayName": "Markdown to HTML",
 	"description": "A dead simple extension for VSCode that allows to convert Markdown to HTML using markdown-it.",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"publisher": "fmoronzirfas",
 	"repository": {
 		"type": "git",

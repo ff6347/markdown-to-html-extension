@@ -1,3 +1,19 @@
+# [1.2.0](https://github.com/ff6347/markdown-to-html-extension/compare/v1.1.0...v1.2.0) (2025-04-14)
+
+
+### Bug Fixes
+
+* Correct and enhance extension tests ([e326b21](https://github.com/ff6347/markdown-to-html-extension/commit/e326b215d55819c8a874fa3f45bc4bd30c6b92d4))
+* Make convet command more dumb ([cb7c7bf](https://github.com/ff6347/markdown-to-html-extension/commit/cb7c7bfb33a7d638e163f684e98dc2f2069bc56a))
+
+
+### Features
+
+* Enable/Disable autorefresh ([c0cef13](https://github.com/ff6347/markdown-to-html-extension/commit/c0cef130a96a2a14360aae65b2b1b1e44e62dba2))
+* enhance markdown conversion and command structure ([20d609b](https://github.com/ff6347/markdown-to-html-extension/commit/20d609b578146a5ac7d95c27620116374070ed38))
+* enhance markdown conversion and command structure ([34a29b1](https://github.com/ff6347/markdown-to-html-extension/commit/34a29b170b70d20ae39266383c6cbd0ef1e67581))
+* OpenInBrowser command ([9c7b33e](https://github.com/ff6347/markdown-to-html-extension/commit/9c7b33e0cd1eaa48d75411a51f0bbf1b1dc082e1))
+
 # [1.1.0](https://github.com/ff6347/markdown-to-html-extension/compare/v1.0.1...v1.1.0) (2025-04-14)
 
 
