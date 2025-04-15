@@ -44,4 +44,3 @@ renovate.json
 test
 test_manual
 src/test/*.test.js
-icon.png
