@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/ff6347/markdown-to-html-extension/compare/v1.2.0...v1.2.1) (2025-04-15)
+
+
+### Bug Fixes
+
+* Dont ignore the icon or it wont publish ([01790d4](https://github.com/ff6347/markdown-to-html-extension/commit/01790d4333b007299ddb807323b2f8bdf10712a5))
+
 # [1.2.0](https://github.com/ff6347/markdown-to-html-extension/compare/v1.1.0...v1.2.0) (2025-04-14)
 
 
