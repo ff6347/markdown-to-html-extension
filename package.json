@@ -85,6 +85,6 @@
 		"typescript-eslint": "8.62.1"
 	},
 	"dependencies": {
-		"markdown-it": "14.0.0"
+		"markdown-it": "14.3.0"
 	}
 }
